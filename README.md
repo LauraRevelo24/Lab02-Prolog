@@ -119,25 +119,18 @@ M = [piolin].
 Defina:
 
 ```prolog
-duenos_de_tipo(Tipo, Personas).
+duenos_de_gato(Personas).
 ```
 
-que permita obtener una lista con las personas que tienen mascotas de un determinado tipo.
+que permita obtener una lista con las personas que tienen gatos de mascota.
 
 Debe utilizar `findall/3`.
 
 Ejemplo:
 
 ```prolog
-?- duenos_de_tipo(perro, Personas).
-Personas = [ana, luis, pedro].
-```
-
-Otro ejemplo:
-
-```prolog
-?- duenos_de_tipo(gato, Personas).
-Personas = [ana, luis, julia].
+?- duenos_de_gato(Personas).
+Personas = [ana, xxx].
 ```
 
 ### Reto
@@ -157,13 +150,13 @@ Modifique el ejercicio anterior utilizando `setof/3`.
 Defina:
 
 ```prolog
-duenos_unicos_de_tipo(Tipo, Personas).
+duenos_unicos_de_gato(Personas).
 ```
 
 Ejemplo:
 
 ```prolog
-?- duenos_unicos_de_tipo(gato, Personas).
+?- duenos_unicos_de_gato(gato, Personas).
 Personas = [ana, julia, luis].
 ```
 
@@ -185,6 +178,13 @@ Defina:
 ```prolog
 tipos_mascota(Persona, Tipos).
 ```
+Tip se debe definir una regla por cada tipo
+
+```prolog
+tipo_mascota(Mascota, perro) :- ...
+...
+```
+
 
 Utilice `setof/3` para obtener los diferentes tipos de mascota que posee una persona.
 
@@ -192,9 +192,6 @@ Ejemplos:
 
 ```prolog
 ?- tipos_mascota(ana, Tipos).
-Tipos = [gato, perro].
-
-?- tipos_mascota(luis, Tipos).
 Tipos = [gato, perro].
 
 ?- tipos_mascota(maria, Tipos).
@@ -238,7 +235,7 @@ pedro → [bruno]
 
 ## Ejercicio 6 — Agrupar dueños por tipo de mascota
 
-Utilice `bagof/3` para realizar una consulta que agrupe las personas según el tipo de mascota.
+Utilice `bagof/3` para definir una regla que agrupe las personas según el tipo de mascota.
 
 El objetivo es obtener grupos conceptualmente similares a:
 
@@ -248,6 +245,9 @@ gato  → [ana, julia, luis]
 ave   → [maria]
 ```
 
+### Preguntas
+1. Realiza la consulta para obtener los dueños de un tipo especifico
+2. Realiza la consulta para obtener el grupo de dueños por cada tipo
 ---
 
 # Parte 4 — `forall/2`
@@ -260,9 +260,16 @@ Defina:
 todos_tienen_mascota.
 ```
 
-que sea verdadero si todas las personas que aparecen como dueños tienen al menos una mascota.
+que sea verdadero si todas las personas que aparecen tienen al menos una mascota.
 
 Debe utilizar `forall/2`.
+
+Tip define la siguiente regla para generar dinamicamente las personas.
+
+```prolog
+persona(Persona) :-
+    dueno(Persona, _).
+```
 
 ### Restricción
 
@@ -275,6 +282,7 @@ tiene_mascota(luis).
 
 La regla debe funcionar independientemente de cuántos dueños existan en la base de conocimiento.
 
+1. verifica realizando la consulta todos_tienen_mascota
 ---
 
 ## Ejercicio 8 — Todas las mascotas tienen un dueño
@@ -289,6 +297,13 @@ que verifique que para cada mascota registrada exista una persona que sea su due
 
 Debe utilizar `forall/2`.
 
+Tip define varias reglas para encontrar cualquier mascota
+
+```prolog
+mascota(Mascota) :- perro(Mascota).
+...
+```
+
 Los tipos de mascotas disponibles son:
 
 ```prolog
@@ -297,84 +312,13 @@ gato/1
 ave/1
 ```
 
+1. verifica realizando la consulta todas_las_mascotas_tienen_dueno
 ---
 
-# Parte 5 — Combinando metapredicados
 
-## Ejercicio 9 — Personas con múltiples mascotas
+# Parte 5 — Amantes de los animales
 
-Defina:
-
-```prolog
-multiples_mascotas(Persona).
-```
-
-que determine si una persona tiene dos o más mascotas diferentes.
-
-Luego defina:
-
-```prolog
-duenos_multiples(Personas).
-```
-
-que utilice un metapredicado para obtener todos los dueños con múltiples mascotas.
-
-Resultado esperado:
-
-```prolog
-?- duenos_multiples(Personas).
-Personas = [ana, luis].
-```
-
-### Restricciones
-
-`duenos_multiples/1` debe utilizar `findall/3` o `setof/3`.
-
----
-
-## Ejercicio 10 — Personas con múltiples tipos de mascota
-
-Defina:
-
-```prolog
-multiples_tipos(Persona).
-```
-
-Debe determinar si una persona tiene más de un tipo de mascota.
-
-Ejemplos:
-
-```prolog
-?- multiples_tipos(ana).
-true.
-
-?- multiples_tipos(luis).
-true.
-
-?- multiples_tipos(maria).
-false.
-```
-
-Posteriormente defina:
-
-```prolog
-duenos_multiples_tipos(Personas).
-```
-
-utilizando `setof/3`.
-
-Resultado esperado:
-
-```prolog
-?- duenos_multiples_tipos(Personas).
-Personas = [ana, luis].
-```
-
----
-
-# Parte 6 — Amantes de los animales
-
-## Ejercicio 11 — Amantes de los animales
+## Ejercicio 9 — Amantes de los animales
 
 Retome el concepto trabajado en el laboratorio anterior.
 
@@ -412,9 +356,9 @@ Compare ambas soluciones.
 
 ---
 
-# Parte 7 — Mascotas compartidas
+# Parte 6 — Mascotas compartidas
 
-## Ejercicio 12 — Mascotas compartidas
+## Ejercicio 10 — Mascotas compartidas
 
 Retome el predicado:
 
@@ -427,20 +371,20 @@ Una mascota es compartida cuando pertenece a dos personas diferentes.
 Posteriormente cree:
 
 ```prolog
-mascotas_compartidas(Mascotas).
+mascotas_compartidas(Persona1, Persona2,Mascotas).
 ```
 
-que encuentre todas las mascotas compartidas utilizando `setof/3`.
+que encuentre todas las mascotas compartidas por dos personas utilizando `setof/3`.
 
 ### Caso adicional
 
 Modifique la base de conocimiento agregando:
 
 ```prolog
-dueno(maria, firulais).
+dueno(ana,luna).
 ```
 
-Ahora `firulais` debe aparecer como mascota compartida.
+Ahora `luna` debe aparecer como mascota compartida.
 
 ---
 
