@@ -46,7 +46,406 @@ El desarrollo se realizará en **[SWISH Prolog](https://swish.swi-prolog.org/)**
 
 ---
 
-## Ejercicio 1 - Problema de la rana
+
+## Base de conocimiento
+
+Utilice la siguiente base de conocimiento para resolver los ejercicios:
+
+```prolog
+perro(firulais).
+perro(bruno).
+perro(max).
+
+gato(misu).
+gato(luna).
+gato(chanel).
+gato(orion).
+
+ave(piolin).
+
+dueno(ana, firulais).
+dueno(ana, misu).
+
+dueno(luis, luna).
+dueno(luis, orion).
+dueno(luis, firulais).
+
+dueno(maria, piolin).
+
+dueno(julia, chanel).
+
+dueno(pedro, bruno).
+```
+
+---
+
+# Parte 1 — `findall/3`
+
+## Ejercicio 1 — Lista de mascotas de una persona
+
+Defina:
+
+```prolog
+mascotas(Persona, Mascotas).
+```
+
+que utilice `findall/3` para obtener todas las mascotas de una persona.
+
+Ejemplos:
+
+```prolog
+?- mascotas(ana, M).
+M = [firulais, misu].
+
+?- mascotas(luis, M).
+M = [luna, orion, firulais].
+
+?- mascotas(maria, M).
+M = [piolin].
+```
+
+### Pregunta
+
+¿Qué debería devolver?
+
+```prolog
+?- mascotas(carlos, M).
+```
+
+---
+
+## Ejercicio 2 — Dueños de un tipo de mascota
+
+Defina:
+
+```prolog
+duenos_de_tipo(Tipo, Personas).
+```
+
+que permita obtener una lista con las personas que tienen mascotas de un determinado tipo.
+
+Debe utilizar `findall/3`.
+
+Ejemplo:
+
+```prolog
+?- duenos_de_tipo(perro, Personas).
+Personas = [ana, luis, pedro].
+```
+
+Otro ejemplo:
+
+```prolog
+?- duenos_de_tipo(gato, Personas).
+Personas = [ana, luis, julia].
+```
+
+### Reto
+
+¿Qué problema aparece con los duplicados si una persona tiene varias mascotas del mismo tipo?
+
+Por ejemplo, Luis tiene `luna` y `orion`, y ambas son gatos.
+
+---
+
+# Parte 2 — `setof/3`
+
+## Ejercicio 3 — Dueños únicos
+
+Modifique el ejercicio anterior utilizando `setof/3`.
+
+Defina:
+
+```prolog
+duenos_unicos_de_tipo(Tipo, Personas).
+```
+
+Ejemplo:
+
+```prolog
+?- duenos_unicos_de_tipo(gato, Personas).
+Personas = [ana, julia, luis].
+```
+
+Observe que:
+
+- no aparecen personas repetidas;
+- la lista aparece ordenada.
+
+### Pregunta conceptual
+
+¿Por qué `findall/3` y `setof/3` producen resultados diferentes para este problema?
+
+---
+
+## Ejercicio 4 — Tipos de mascota que tiene una persona
+
+Defina:
+
+```prolog
+tipos_mascota(Persona, Tipos).
+```
+
+Utilice `setof/3` para obtener los diferentes tipos de mascota que posee una persona.
+
+Ejemplos:
+
+```prolog
+?- tipos_mascota(ana, Tipos).
+Tipos = [gato, perro].
+
+?- tipos_mascota(luis, Tipos).
+Tipos = [gato, perro].
+
+?- tipos_mascota(maria, Tipos).
+Tipos = [ave].
+```
+
+---
+
+# Parte 3 — `bagof/3`
+
+## Ejercicio 5 — Agrupar mascotas por dueño
+
+Utilice `bagof/3` para obtener las mascotas agrupadas por persona.
+
+Realice la consulta:
+
+```prolog
+?- bagof(Mascota, dueno(Persona, Mascota), Mascotas).
+```
+
+Observe cómo Prolog genera diferentes soluciones para `Persona`.
+
+Se esperan grupos similares a:
+
+```text
+ana   → [firulais, misu]
+luis  → [luna, orion, firulais]
+maria → [piolin]
+julia → [chanel]
+pedro → [bruno]
+```
+
+### Preguntas
+
+1. ¿Por qué `bagof/3` genera varias soluciones?
+2. ¿Qué variable está siendo utilizada para realizar la agrupación?
+3. ¿Qué ocurriría si se utilizara `findall/3`?
+4. ¿Qué ocurriría si se utilizara `setof/3`?
+
+---
+
+## Ejercicio 6 — Agrupar dueños por tipo de mascota
+
+Utilice `bagof/3` para realizar una consulta que agrupe las personas según el tipo de mascota.
+
+El objetivo es obtener grupos conceptualmente similares a:
+
+```text
+perro → [ana, luis, pedro]
+gato  → [ana, julia, luis]
+ave   → [maria]
+```
+
+---
+
+# Parte 4 — `forall/2`
+
+## Ejercicio 7 — Personas con al menos una mascota
+
+Defina:
+
+```prolog
+todos_tienen_mascota.
+```
+
+que sea verdadero si todas las personas que aparecen como dueños tienen al menos una mascota.
+
+Debe utilizar `forall/2`.
+
+### Restricción
+
+No debe consultar personas específicas como:
+
+```prolog
+tiene_mascota(ana).
+tiene_mascota(luis).
+```
+
+La regla debe funcionar independientemente de cuántos dueños existan en la base de conocimiento.
+
+---
+
+## Ejercicio 8 — Todas las mascotas tienen un dueño
+
+Defina:
+
+```prolog
+todas_las_mascotas_tienen_dueno.
+```
+
+que verifique que para cada mascota registrada exista una persona que sea su dueño.
+
+Debe utilizar `forall/2`.
+
+Los tipos de mascotas disponibles son:
+
+```prolog
+perro/1
+gato/1
+ave/1
+```
+
+---
+
+# Parte 5 — Combinando metapredicados
+
+## Ejercicio 9 — Personas con múltiples mascotas
+
+Defina:
+
+```prolog
+multiples_mascotas(Persona).
+```
+
+que determine si una persona tiene dos o más mascotas diferentes.
+
+Luego defina:
+
+```prolog
+duenos_multiples(Personas).
+```
+
+que utilice un metapredicado para obtener todos los dueños con múltiples mascotas.
+
+Resultado esperado:
+
+```prolog
+?- duenos_multiples(Personas).
+Personas = [ana, luis].
+```
+
+### Restricciones
+
+`duenos_multiples/1` debe utilizar `findall/3` o `setof/3`.
+
+---
+
+## Ejercicio 10 — Personas con múltiples tipos de mascota
+
+Defina:
+
+```prolog
+multiples_tipos(Persona).
+```
+
+Debe determinar si una persona tiene más de un tipo de mascota.
+
+Ejemplos:
+
+```prolog
+?- multiples_tipos(ana).
+true.
+
+?- multiples_tipos(luis).
+true.
+
+?- multiples_tipos(maria).
+false.
+```
+
+Posteriormente defina:
+
+```prolog
+duenos_multiples_tipos(Personas).
+```
+
+utilizando `setof/3`.
+
+Resultado esperado:
+
+```prolog
+?- duenos_multiples_tipos(Personas).
+Personas = [ana, luis].
+```
+
+---
+
+# Parte 6 — Amantes de los animales
+
+## Ejercicio 11 — Amantes de los animales
+
+Retome el concepto trabajado en el laboratorio anterior.
+
+Defina:
+
+```prolog
+amante_animales(Persona).
+```
+
+Una persona es amante de los animales si tiene por lo menos un perro y por lo menos un gato.
+
+Luego cree:
+
+```prolog
+amantes_animales(Personas).
+```
+
+que utilice un metapredicado para encontrar todos los amantes de los animales.
+
+Resultado esperado:
+
+```prolog
+?- amantes_animales(Personas).
+Personas = [ana, luis].
+```
+
+### Reto
+
+Resuelva `amantes_animales/1` utilizando:
+
+1. `findall/3`.
+2. `setof/3`.
+
+Compare ambas soluciones.
+
+---
+
+# Parte 7 — Mascotas compartidas
+
+## Ejercicio 12 — Mascotas compartidas
+
+Retome el predicado:
+
+```prolog
+mascota_compartida(Persona1, Persona2, Mascota).
+```
+
+Una mascota es compartida cuando pertenece a dos personas diferentes.
+
+Posteriormente cree:
+
+```prolog
+mascotas_compartidas(Mascotas).
+```
+
+que encuentre todas las mascotas compartidas utilizando `setof/3`.
+
+### Caso adicional
+
+Modifique la base de conocimiento agregando:
+
+```prolog
+dueno(maria, firulais).
+```
+
+Ahora `firulais` debe aparecer como mascota compartida.
+
+---
+
+
+## Parte 8 - Problema de la rana
 
 Un problema bien conocido es aquel de la rana donde dados un punto de inicio junto con otros puntos que representan la ubicación de una serie de piedras se quiere determinar si una rana la cual tiene
 una capacidad maxima de salto puede llegar a un punto objetivo.
@@ -86,7 +485,7 @@ buscar_solucion(Solucion) :-
 
 ---
 
-## Ejercicio 2 - Problema de Batman vs Villanos
+## Parte 9 - Problema de Batman vs Villanos
 
 Se tiene un problema donde dados una lista de poderes y su respectivo daño, asi como el costo asociado a usar este, junto con una lista de villanos con sus puntos de vida, y una lista de sus debilidades a poderes.
 
@@ -121,28 +520,6 @@ batman_can_win(EnergiaMaxima) :-
     EstadoInicial = estado(Villanos, Superpoderes, EnergiaMaxima),
     dfs(EstadoInicial, [EstadoInicial]). %dfs(Estado,Visitados)
 ```
-
----
-
-## Ejercicio 3 - 8 reinas
-
-Se quiere resolver el problema de las [8 reinas](https://es.wikipedia.org/wiki/Problema_de_las_ocho_reinas) usanado DFS, donde un estado se puede entender como una lista donde cada elemento representa
-la fila en la que esta esa reina, es decir [4,3] dice que en hay reinas en la columna 1, fila 4, y columna 2, fila 3.
-
-Asi se puede definir la regla de dfs para solo tener en cuenta la solucion final y no todo el camino.
-
-```
-dfs(EstadoActual, Visitados, SolucionFinal)
-```
-
-Asi se puede iniciar la busqueda en el espacio de soluciones.
-
-```
-solucion(Solucion) :-
-    EstadoInicial = [],
-    dfs(EstadoInicial, [EstadoInicial], Solucion).
-```
-
 ---
 
 
