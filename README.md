@@ -1,4 +1,4 @@
-# Laboratorio 02 - Busquedas en Prolog  
+# Laboratorio 02 - Busquedas en Prolog y Metapredicados 
 
 ## 📌 Descripción  
 Este laboratorio tiene como objetivo que los estudiantes fortalezcan sus conocimientos relacionados a algoritmos de busqueda en **Prolog**.
