@@ -13,20 +13,11 @@ El desarrollo se realizará en **[SWISH Prolog](https://swish.swi-prolog.org/)**
    - Realice un **fork** de este repositorio en su cuenta personal de GitHub.  
    - No realice cambios directamente sobre el repositorio original.  
 
-2. **Estructura de carpetas**  
-   - Dentro de su fork, cree una carpeta llamada **`lab02/`**.  
-   - Cada ejercicio debe resolverse en un archivo **independiente** con el siguiente formato:  
-     ```
-     lab02/ejercicio01.pl
-     lab02/ejercicio02.pl
-     ...
-     ```  
-
-3. **Resolución de ejercicios**  
+2. **Resolución de ejercicios**  
    - Desarrolle los programas en **SWISH Prolog**.  
-   - Una vez finalizados, copie el código a los archivos `.pl` correspondientes en su repositorio.  
-   - Cada archivo debe contener:
-     - La implementación de su solución.  
+   - Una vez finalizados, tome un pantallazo del codigo y las pruebas
+   - Al finalizar se debe crear y agregar un documento PDF con los integrantes del grupo y los pantallazos:
+     - DEBEN haber dos documentos, uno con el trabajo en clase y otro con TODOS los ejercicios realizados.  
 
 4. **Buenas prácticas**  
    - Use **nombres de predicados claros y significativos**.
