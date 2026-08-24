@@ -396,7 +396,7 @@ una capacidad maxima de salto puede llegar a un punto objetivo.
 
 Para este problema se tienen los siguientes hechos.
 
-```
+```prolog
 % --- HECHOS Y CAPACIDADES (PARÁMETROS DEL PROBLEMA) ---
 
 % Coordenadas de las ubicaciones: ubicacion(ID, X, Y).
@@ -411,17 +411,17 @@ ubicacion(orilla_final, 10, 5).
 salto_maximo(4.0).
 ```
 
-Usando el algoritmo generico de DFS visto en clase, poder determinar si la rana puede llegar de la `orilla_inicial` a la `orilla_final`.
+Usa el algoritmo DFS (Generico) visto en clase, poder determinar si la rana puede llegar de la `orilla_inicial` a la `orilla_final`.
 
 Definir la regla `siguiente_estado/2`, que determine si es posible pasar de un estado a otro, esta puede definirse así, donde consultado `ubicacion` para `LugarActual`, se obtienen las ubicaciones.
 
-```
+```prolog
 siguiente_estado(pos(LugarActual), pos(LugarSiguiente))
 ```
 
 Asi se puede iniciar la busqueda en el espacio de soluciones.
 
-```
+```prolog
 buscar_solucion(Solucion) :-
     EstadoInicial = pos(orilla_inicial),
     dfs(EstadoInicial, [EstadoInicial], Solucion). %dfs(Estado,Visitados, Solucion)
@@ -439,7 +439,8 @@ Para este problema se tienen los siguientes hechos.
 
 Aqui se tiene por ejemplo el poder logica que hace 100 de daño, y usa 10 de energia, y se tiene el villano riddler que tiene 90 de salud y es debil a logica y sigilo.
 
-```
+```prolog
+% --- BASE DE HECHOS ---
 power_list([
     power(logica, 100, 10),
     power(sigilo, 150, 30),
@@ -452,11 +453,22 @@ villain_list([
 ]).
 ```
 
-Usando el algoritmo DFS visto en clase, poder determinar si batman puede derrotar a todos los villanos con la energia disponible o no.
+Usa el algoritmo DFS (Generico) visto en clase, poder determinar si batman puede derrotar a todos los villanos con la energia disponible o no.
+
+Asi se define el ESTADO
+
+    estado(Villanos, Superpoderes, EnergiaMaxima)
+
+Tip el caso base se puede definir asi
+
+```prolog
+% Caso Base (META): Se encontró una solución si el estado actual no tiene villanos.
+dfs(estado([], _, _), _).
+```
 
 Asi se puede iniciar la busqueda en el espacio de soluciones.
 
-```
+```prolog
 batman_can_win(EnergiaMaxima) :-
     power_list(Superpoderes),
     villain_list(Villanos),
@@ -464,6 +476,12 @@ batman_can_win(EnergiaMaxima) :-
     EstadoInicial = estado(Villanos, Superpoderes, EnergiaMaxima),
     dfs(EstadoInicial, [EstadoInicial]). %dfs(Estado,Visitados)
 ```
+
+Definir la regla `siguiente_estado/2`, que determine el siguiente estado dado el estado actual, deben ser dos reglas donde cada una cubre un caso (definicion por casos):
+
+1. Regla 1: OMITIR un superpoder (usar los siguientes poderes contra el MISMO villano).
+2. Regla 2: USAR un superpoder contra el villano actual.
+
 ---
 
 
